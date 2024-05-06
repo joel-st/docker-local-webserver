@@ -1,0 +1,80 @@
+version: "3.7"
+
+x-defaults:
+    network: &network
+        networks:
+            - network
+    volumes: &volumes
+        volumes:
+            - webserver-root:/var/www
+    configs: &configs
+        configs:
+            - source: apache-vhosts
+              target: /etc/apache2/sites-available/000-default.conf
+            - source: php-ini
+              target: /usr/local/etc/php/conf.d/local.ini
+            - source: ssmtp-conf
+              target: /etc/ssmtp/ssmtp.conf
+    ports: &ports
+        ports:
+            - 80:80
+            - 443:443
+
+services:
+    php:
+        image: webserver-php8.1:latest
+        <<: [*ports, *volumes, *configs, *network]
+
+    mysql:
+        image: mysql:latest
+        ports:
+            - 3306:3306
+        environment:
+            - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/db_pwd
+            - MYSQL_USER=dbuser
+            - MYSQL_PASSWORD=dbpass
+        volumes:
+            - webserver-mysql-data:/var/lib/mysql
+        secrets:
+            - db_pwd
+        <<: [*network]
+
+    myadmin:
+        image: phpmyadmin:latest
+        environment:
+            - PMA_HOST=mysql
+            - PMA_USER=dbuser
+            - PMA_PASSWORD=dbpass
+            - UPLOAD_LIMIT=20M
+        ports:
+            - 8080:80 #web ui
+        <<: [*network]
+
+    mail:
+        image: jcalonso/mailhog:latest
+        ports:
+            - 1025:1025
+            - 8025:8025
+        <<: [*network]
+
+networks:
+    network:
+
+secrets:
+    db_pwd:
+        file: ./mysql/root-password.txt
+
+configs:
+    apache-vhosts:
+        file: ./apache/vhosts.conf
+    php-ini:
+        file: ./php/local.ini
+    ssmtp-conf:
+        file: ./ssmtp/ssmtp.conf
+
+volumes:
+    webserver-root:
+        external: true
+
+    webserver-mysql-data:
+        external: true
