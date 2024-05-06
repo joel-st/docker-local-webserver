@@ -2,16 +2,12 @@
 
 Docker driven apache webserver setup for apple computers providing PHP, MYSQL, phpMyAdmin and Mailhog. The repo contains helpful scripts to handle things like **virtual hosts configuration**, **certificate creation**, and **project management**.
 
----
-
 ## Docker Services
 
 * [php](https://hub.docker.com/_/php)
 * [mysql](https://hub.docker.com/_/mysql)
 * [phpmyadmin](https://hub.docker.com/_/phpmyadmin)
 * [jcalonso/mailhog](https://hub.docker.com/r/jcalonso/mailhog)
-
----
 
 ## Setup
 
@@ -40,11 +36,7 @@ If you want to do all of it manually, be sure to follow those necessary steps:
 3. Resolve the project url to localhost by adding an entry to your `/etc/hosts` file e.g.: `127.0.0.1 project.local`
 4. Start/Restart the docker webserver
 
----
-
 ## Files & Folders
-
-...............................................................
 
 ### 📁 Apache
 
@@ -82,8 +74,6 @@ Virtual hosts configuration which will be loaded into the webserver on start.
 
 Concatenates all apache virtual hosts config files from the project folders from within the webroot to [vhosts.conf](./apache/vhosts.conf).
 
-...............................................................
-
 ### 📁 Images
 
 * [images](./images)
@@ -94,8 +84,6 @@ Folder for all docker images.
 * ↳ [webserver-php8.1](./images/webserver-php8.1)
 
 Webserver images are ready for PHP v7.4 and v8.1. Just change the PHP version `FROM php:X.X-apache` to run your desired PHP version. The image will install required dev tools, composer, WP-CLI, Oh My Zsh and setup Mailhog.
-
-...............................................................
 
 ### 📁 MySQL
 
@@ -111,8 +99,6 @@ The default MySQL data directory. The `.gitignore` is set to ignore changes in t
 
 MySQL root password file. Default user creds for MySQL and phpMyAdmin: `dbuser` & `dbpass`
 
-...............................................................
-
 ### 📁 PHP
 
 * [php](./php)
@@ -123,8 +109,6 @@ Folder for all stuff related to the PHP service.
 
 Default PHP ini configuration. Sets `sendmail_path` to make Mailhog available.
 
-...............................................................
-
 ### 📁 sSMTP
 
 * [ssmtp](./ssmtp)
@@ -134,8 +118,6 @@ Folder for all stuff related to the sSMTP configuration.
 * ↳ [ssmtp.conf](./ssmtp/ssmtp.conf)
 
 Default sSMTP configuration to make Mailhog available.
-
-...............................................................
 
 ### 📁 Others
 
@@ -150,5 +132,3 @@ Docker Compose file. As for now, you only need to change this file if you would 
 * [readme.md](./readme.md)
 
 Hey it's me!
-
-...............................................................
